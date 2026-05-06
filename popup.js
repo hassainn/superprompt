@@ -402,7 +402,7 @@ function getRequirements(category, level) {
 // ═══════════════════════════════════════════════════════════════════════════
 const CONFIG = {
   // Paste your Google Apps Script web app URL here after deploying apps-script.gs
-  appsScriptUrl: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbz1nrN_eBqHKB-jlGywZp17BsMgf7RkATI9aQ1CCAiUMyoxj0S2ruLa4WWX5uVzmzc/exec',
 
   // Paste your Razorpay payment link URLs here (create at razorpay.com/payment-links)
   razorpayLinks: {

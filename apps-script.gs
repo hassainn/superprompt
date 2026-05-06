@@ -16,8 +16,8 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ── Developer config (fill these in) ──────────────────────────────────────
-const SHEET_ID                = 'YOUR_GOOGLE_SHEET_ID';
-const RAZORPAY_WEBHOOK_SECRET = 'YOUR_RAZORPAY_WEBHOOK_SECRET';
+const SHEET_ID                = '1ToYi7QJyjXX5LovzJLCpNlO8HmQfwoYJLwT1SlC59jI';
+const RAZORPAY_WEBHOOK_SECRET = 'superprompt-webhook-2026';
 const ADMIN_EMAIL             = 'support.alphaone@gmail.com';
 const EXTENSION_NAME          = 'SuperPrompt';
 
