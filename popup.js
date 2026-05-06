@@ -406,8 +406,8 @@ const CONFIG = {
 
   // Paste your Razorpay payment link URLs here (create at razorpay.com/payment-links)
   razorpayLinks: {
-    pro:    'https://rzp.io/l/YOUR-PRO-LINK-HERE',
-    expert: 'https://rzp.io/l/YOUR-EXPERT-LINK-HERE',
+    pro:    'https://rzp.io/rzp/Ab82BWJ',
+    expert: 'https://rzp.io/rzp/LrLj39UI',
   },
 
   upiId:    'hassainn.mcsa@okicici',
