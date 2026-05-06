@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SuperPrompt — Admin Key Generator</title>
+<style>
+/* ── Base ─────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#f0eeff;color:#1a1523;min-height:100vh}
+
+/* ── Header ───────────────────────────────────────────────────── */
+.header{
+  background:linear-gradient(135deg,#6366f1 0%,#a855f7 100%);
+  color:white;padding:18px 32px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 2px 12px rgba(99,102,241,.35)}
+.header-logo{font-size:28px}
+.header-title{font-size:20px;font-weight:800;letter-spacing:-.3px}
+.header-sub{font-size:12px;opacity:.8;margin-top:2px}
+.header-badge{
+  margin-left:auto;background:rgba(255,255,255,.2);
+  border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700}
+
+/* ── Main ─────────────────────────────────────────────────────── */
+.main{max-width:900px;margin:0 auto;padding:28px 20px}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+.card{background:#fff;border-radius:14px;border:1.5px solid #e5e3f3;
+  padding:20px 24px;margin-bottom:20px;
+  box-shadow:0 2px 12px rgba(99,102,241,.08)}
+.card-title{font-size:13px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:#6366f1;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px}
+
+/* ── Secret alert ─────────────────────────────────────────────── */
+.secret-box{
+  background:linear-gradient(135deg,#fef3c7,#fde68a);
+  border:1.5px solid #f59e0b;border-radius:10px;
+  padding:12px 16px;margin-bottom:20px;
+  display:flex;align-items:flex-start;gap:10px}
+.secret-box .icon{font-size:18px;flex-shrink:0;margin-top:2px}
+.secret-box p{font-size:12.5px;color:#78350f;line-height:1.6}
+.secret-box strong{font-weight:700}
+.secret-edit{display:flex;gap:8px;margin-top:8px;align-items:center}
+.secret-edit input{
+  flex:1;padding:6px 10px;border:1.5px solid #f59e0b;border-radius:7px;
+  font-family:monospace;font-size:12px;background:#fffbeb;
+  outline:none;font-weight:600;letter-spacing:.5px}
+.secret-edit button{
+  padding:6px 14px;background:#f59e0b;border:none;border-radius:7px;
+  color:white;font-size:12px;font-weight:700;cursor:pointer}
+
+/* ── Generator form ───────────────────────────────────────────── */
+.gen-form{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;color:#6b6b8a}
+.field select,.field input{
+  padding:8px 12px;border:1.5px solid #e5e3f3;border-radius:8px;
+  font-size:13px;color:#1a1523;background:#fff;outline:none;
+  transition:border-color .2s;font-family:inherit}
+.field select:focus,.field input:focus{border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.field select{min-width:130px}
+.field-customer input{width:200px}
+
+.btn-gen{
+  padding:9px 22px;
+  background:linear-gradient(135deg,#6366f1,#a855f7);
+  border:none;border-radius:8px;color:white;font-size:13px;
+  font-weight:800;cursor:pointer;white-space:nowrap;
+  box-shadow:0 3px 10px rgba(99,102,241,.35);
+  transition:opacity .15s,transform .1s;align-self:flex-end}
+.btn-gen:hover{opacity:.9}
+.btn-gen:active{transform:scale(.97)}
+
+/* ── Stats ────────────────────────────────────────────────────── */
+.stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.stat{
+  background:#fff;border:1.5px solid #e5e3f3;border-radius:10px;
+  padding:12px 18px;flex:1;min-width:120px;
+  box-shadow:0 1px 6px rgba(99,102,241,.06)}
+.stat-num{font-size:24px;font-weight:800;color:#6366f1;line-height:1}
+.stat-label{font-size:11px;color:#6b6b8a;margin-top:3px;font-weight:600}
+.stat.pro .stat-num{color:#1a56db}
+.stat.exp .stat-num{color:#059669}
+
+/* ── Table ────────────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  background:#f8f7ff;padding:9px 12px;text-align:left;
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;color:#6b6b8a;border-bottom:1.5px solid #e5e3f3}
+tbody tr{border-bottom:1px solid #f0eeff;transition:background .15s}
+tbody tr:hover{background:#faf9ff}
+tbody tr.sent{opacity:.55}
+td{padding:9px 12px;vertical-align:middle}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700}
+.badge-pro{background:#dbeafe;color:#1d4ed8}
+.badge-exp{background:#d1fae5;color:#065f46}
+.code-cell{font-family:monospace;font-size:12.5px;font-weight:700;
+  color:#1a1523;letter-spacing:.3px}
+.actions{display:flex;gap:6px}
+.btn-sm{
+  padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;
+  border:1.5px solid #e5e3f3;background:#fff;cursor:pointer;
+  transition:all .15s;white-space:nowrap}
+.btn-copy:hover{border-color:#6366f1;color:#6366f1}
+.btn-sent{color:#6b6b8a}
+.btn-sent:hover{border-color:#22c55e;color:#22c55e;background:#f0fdf4}
+.btn-sent.done{border-color:#22c55e;color:#22c55e;background:#f0fdf4}
+.btn-del:hover{border-color:#ef4444;color:#ef4444}
+
+/* ── Table footer actions ─────────────────────────────────────── */
+.table-actions{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:14px;flex-wrap:wrap;gap:8px}
+.btn-export{
+  padding:7px 18px;border-radius:8px;border:1.5px solid #6366f1;
+  color:#6366f1;background:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .15s}
+.btn-export:hover{background:#6366f1;color:#fff}
+.btn-clear-all{
+  padding:7px 18px;border-radius:8px;border:1.5px solid #ef4444;
+  color:#ef4444;background:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .15s}
+.btn-clear-all:hover{background:#ef4444;color:#fff}
+.empty{text-align:center;padding:36px;color:#6b6b8a;font-size:13px}
+
+/* ── How to use ───────────────────────────────────────────────── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.how-item{background:#f8f7ff;border-radius:10px;padding:14px;border:1px solid #e5e3f3}
+.how-num{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,#6366f1,#a855f7);
+  color:#fff;font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.how-item h4{font-size:12.5px;font-weight:700;margin-bottom:4px;color:#1a1523}
+.how-item p{font-size:11.5px;color:#6b6b8a;line-height:1.5}
+
+/* ── Toast ────────────────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:#1a1523;color:#fff;padding:8px 20px;border-radius:20px;
+  font-size:12px;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;
+  z-index:9999;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-logo">⚡</span>
+  <div>
+    <div class="header-title">SuperPrompt — Admin Key Generator</div>
+    <div class="header-sub">Generate &amp; manage activation codes · Local-only · No server needed</div>
+  </div>
+  <div class="header-badge">🔐 Developer Only</div>
+</div>
+
+<div class="main">
+
+  <!-- Secret warning -->
+  <div class="secret-box">
+    <span class="icon">⚠️</span>
+    <div>
+      <p><strong>Important:</strong> This secret must exactly match <code>HMAC_SECRET</code> in <strong>popup.js</strong>.
+      Change it once, update both files, and never share it. Codes are invalid if secrets differ.</p>
+      <div class="secret-edit">
+        <input type="text" id="secretInput" value="SP-NAZEER-KEY-2025" spellcheck="false"/>
+        <button onclick="saveSecret()">Save Secret</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Total Codes</div>
+    </div>
+    <div class="stat pro">
+      <div class="stat-num" id="statPro">0</div>
+      <div class="stat-label">Pro (₹79)</div>
+    </div>
+    <div class="stat exp">
+      <div class="stat-num" id="statExp">0</div>
+      <div class="stat-label">Expert (₹149)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="statSent">0</div>
+      <div class="stat-label">Sent to Customers</div>
+    </div>
+  </div>
+
+  <!-- Generator -->
+  <div class="card">
+    <div class="card-title">🔑 Generate New Activation Code</div>
+    <div class="gen-form">
+      <div class="field">
+        <label>Tier</label>
+        <select id="genTier">
+          <option value="pro">Pro — ₹79/month</option>
+          <option value="expert">Expert — ₹149/month</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Month / Year</label>
+        <select id="genMonth"></select>
+      </div>
+      <div class="field field-customer">
+        <label>Customer Name (optional)</label>
+        <input type="text" id="genCustomer" placeholder="e.g. Ahmed Khan"/>
+      </div>
+      <button class="btn-gen" onclick="generateCode()">⚡ Generate Code</button>
+    </div>
+  </div>
+
+  <!-- Issued codes table -->
+  <div class="card">
+    <div class="card-title">📋 Issued Activation Codes</div>
+    <div class="table-wrap">
+      <table id="codesTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Activation Code</th>
+            <th>Tier</th>
+            <th>Customer</th>
+            <th>Generated</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="codesBody">
+          <tr><td colspan="7" class="empty">No codes generated yet. Use the form above.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-actions">
+      <button class="btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn-clear-all" onclick="clearAll()">🗑 Clear All</button>
+    </div>
+  </div>
+
+  <!-- How to use -->
+  <div class="card">
+    <div class="card-title">📖 How to Use</div>
+    <div class="how-grid">
+      <div class="how-item">
+        <div class="how-num">1</div>
+        <h4>Customer Pays</h4>
+        <p>Customer pays ₹79 (Pro) or ₹149 (Expert) via Razorpay or UPI to <strong>hassainn.mcsa@okicici</strong>.</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">2</div>
+        <h4>Generate Code</h4>
+        <p>Open this page, select Pro or Expert, enter the current month, optionally add the customer name, click Generate.</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">3</div>
+        <h4>Send the Code</h4>
+        <p>Click <strong>Copy</strong> next to the code and send it to the customer via WhatsApp or email.</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">4</div>
+        <h4>Mark as Sent</h4>
+        <p>Click the ✓ checkmark to mark the code as sent. Codes expire after the current + previous month automatically.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Shared secret (must match HMAC_SECRET in popup.js) ─────────────────────
+let SECRET = localStorage.getItem('sp_admin_secret') || 'SP-NAZEER-KEY-2025';
+
+const STORAGE_KEY = 'sp_admin_codes';
+
+// ── Populate month selector ──────────────────────────────────────────────────
+(function populateMonths() {
+  const sel = document.getElementById('genMonth');
+  const now = new Date();
+  for (let i = 0; i < 6; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const yy   = String(d.getFullYear()).slice(-2);
+    const mm   = String(d.getMonth() + 1).padStart(2, '0');
+    const yymm = yy + mm;
+    const label = d.toLocaleString('default', { month: 'long', year: 'numeric' });
+    const opt = document.createElement('option');
+    opt.value = yymm;
+    opt.textContent = label + ' (' + yymm + ')';
+    if (i === 0) opt.selected = true;
+    sel.appendChild(opt);
+  }
+})();
+
+// Load saved secret
+document.getElementById('secretInput').value = SECRET;
+
+// ── HMAC-SHA256 code generation ──────────────────────────────────────────────
+async function hmac(data, secret) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(data));
+  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function makeCode(tier, yymm, serial) {
+  const prefix    = tier === 'pro' ? 'NZP' : 'NZE';
+  const serialStr = String(serial).padStart(4, '0');
+  const hex       = await hmac(prefix + yymm + serialStr, SECRET);
+  const checksum  = hex.slice(0, 4).toUpperCase();
+  return `${prefix}-${yymm}-${serialStr}-${checksum}`;
+}
+
+// ── Storage helpers ──────────────────────────────────────────────────────────
+function load() { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+function save(codes) { localStorage.setItem(STORAGE_KEY, JSON.stringify(codes)); }
+
+function nextSerial(tier, yymm) {
+  const codes = load().filter(c => c.tier === tier && c.yymm === yymm);
+  return (codes.length > 0 ? Math.max(...codes.map(c => c.serial)) : 0) + 1;
+}
+
+// ── Generate ─────────────────────────────────────────────────────────────────
+async function generateCode() {
+  const tier     = document.getElementById('genTier').value;
+  const yymm     = document.getElementById('genMonth').value;
+  const customer = document.getElementById('genCustomer').value.trim();
+  const serial   = nextSerial(tier, yymm);
+  const code     = await makeCode(tier, yymm, serial);
+  const codes    = load();
+
+  codes.push({
+    id:       Date.now(),
+    code,
+    tier,
+    yymm,
+    serial,
+    customer: customer || '—',
+    date:     new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'2-digit' }),
+    sent:     false,
+  });
+
+  save(codes);
+  document.getElementById('genCustomer').value = '';
+  renderTable();
+  toast('✅ Code generated — ' + code);
+}
+
+// ── Render table ─────────────────────────────────────────────────────────────
+function renderTable() {
+  const codes = load();
+  const tbody = document.getElementById('codesBody');
+
+  if (codes.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">No codes generated yet.</td></tr>';
+    updateStats(codes);
+    return;
+  }
+
+  tbody.innerHTML = [...codes].reverse().map((c, i) => `
+    <tr class="${c.sent ? 'sent' : ''}">
+      <td style="color:#6b6b8a;font-size:11px">${codes.length - i}</td>
+      <td class="code-cell">${c.code}</td>
+      <td><span class="badge ${c.tier === 'pro' ? 'badge-pro' : 'badge-exp'}">
+        ${c.tier === 'pro' ? '✨ Pro' : '🚀 Expert'}
+      </span></td>
+      <td>${c.customer}</td>
+      <td style="color:#6b6b8a;font-size:12px">${c.date}</td>
+      <td style="font-size:12px;font-weight:600;color:${c.sent ? '#22c55e' : '#f59e0b'}">
+        ${c.sent ? '✅ Sent' : '⏳ Pending'}
+      </td>
+      <td><div class="actions">
+        <button class="btn-sm btn-copy" onclick="copyCode('${c.code}')">📋 Copy</button>
+        <button class="btn-sm btn-sent ${c.sent ? 'done' : ''}" onclick="toggleSent(${c.id})">
+          ${c.sent ? '✓ Sent' : '✓ Mark Sent'}
+        </button>
+        <button class="btn-sm btn-del" onclick="deleteCode(${c.id})">✕</button>
+      </div></td>
+    </tr>`
+  ).join('');
+
+  updateStats(codes);
+}
+
+function updateStats(codes) {
+  document.getElementById('statTotal').textContent = codes.length;
+  document.getElementById('statPro').textContent   = codes.filter(c => c.tier === 'pro').length;
+  document.getElementById('statExp').textContent   = codes.filter(c => c.tier === 'expert').length;
+  document.getElementById('statSent').textContent  = codes.filter(c => c.sent).length;
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+async function copyCode(code) {
+  await navigator.clipboard.writeText(code);
+  toast('📋 Copied: ' + code);
+}
+
+function toggleSent(id) {
+  const codes = load();
+  const idx   = codes.findIndex(c => c.id === id);
+  if (idx > -1) { codes[idx].sent = !codes[idx].sent; save(codes); renderTable(); }
+}
+
+function deleteCode(id) {
+  if (!confirm('Delete this code?')) return;
+  save(load().filter(c => c.id !== id));
+  renderTable();
+  toast('🗑 Code deleted');
+}
+
+function clearAll() {
+  if (!confirm('Delete ALL codes? This cannot be undone.')) return;
+  save([]);
+  renderTable();
+  toast('🗑 All codes cleared');
+}
+
+function saveSecret() {
+  SECRET = document.getElementById('secretInput').value.trim();
+  if (!SECRET) { toast('⚠️ Secret cannot be empty'); return; }
+  localStorage.setItem('sp_admin_secret', SECRET);
+  toast('✅ Secret saved — make sure popup.js matches!');
+}
+
+function exportCSV() {
+  const codes = load();
+  if (!codes.length) { toast('No codes to export'); return; }
+  const header = 'Code,Tier,Customer,Month,Date,Status';
+  const rows   = codes.map(c =>
+    `"${c.code}","${c.tier}","${c.customer}","${c.yymm}","${c.date}","${c.sent ? 'Sent' : 'Pending'}"`
+  );
+  const blob = new Blob([header + '\n' + rows.join('\n')], { type: 'text/csv' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = 'superprompt-codes.csv';
+  a.click();
+  toast('⬇ CSV exported');
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+renderTable();
+</script>
+</body>
+</html>

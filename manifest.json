@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "SuperPrompt — AI Prompt Enhancer",
+  "short_name": "SuperPrompt",
+  "version": "1.2.0",
+  "description": "Transform simple English into professional AI prompts for ChatGPT, Gemini, Grok, DeepSeek, Claude & Perplexity",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SuperPrompt — AI Prompt Enhancer"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "clipboardWrite",
+    "clipboardRead",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://script.google.com/*",
+    "https://rzp.io/*",
+    "https://chatgpt.com/*",
+    "https://gemini.google.com/*",
+    "https://grok.com/*",
+    "https://chat.deepseek.com/*",
+    "https://claude.ai/*",
+    "https://www.perplexity.ai/*"
+  ]
+}

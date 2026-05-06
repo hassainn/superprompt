@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Privacy Policy — SuperPrompt</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a14;color:#f0eeff;line-height:1.8;padding:60px 24px}
+.container{max-width:720px;margin:0 auto}
+a{color:#6366f1;text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:32px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.updated{font-size:13px;color:#8b87b5;margin-bottom:32px}
+h2{font-size:20px;font-weight:700;margin:28px 0 10px;color:#c7d2fe}
+p,li{font-size:14px;color:#b0aed0;margin-bottom:12px}
+ul{padding-left:20px}
+.back{display:inline-flex;align-items:center;gap:6px;color:#8b87b5;font-size:13px;font-weight:600;margin-bottom:24px}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html" class="back">← Back to SuperPrompt</a>
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: May 6, 2026</p>
+
+<h2>1. Overview</h2>
+<p>SuperPrompt ("we", "our", "the extension") is a Chrome extension that enhances text prompts for AI tools. We are committed to protecting your privacy.</p>
+
+<h2>2. Data We Collect</h2>
+<p><strong>We do NOT collect, transmit, or store any personal data on external servers.</strong></p>
+<ul>
+<li><strong>Prompts & History:</strong> All prompts, history, and library data are stored locally in your browser using Chrome's storage API. They never leave your device.</li>
+<li><strong>Activation Codes:</strong> When you activate a paid plan, the activation code is verified either locally (HMAC validation) or against our Google Apps Script backend. Only the code itself is transmitted — no personal information.</li>
+<li><strong>Payment Data:</strong> Payments are processed by Razorpay. We do not handle, see, or store your card numbers, UPI IDs, or banking credentials. See <a href="https://razorpay.com/privacy/" target="_blank">Razorpay's Privacy Policy</a>.</li>
+<li><strong>Email:</strong> If you pay via Razorpay Payment Link, Razorpay collects your email to send the activation code. We use this email solely for sending the activation code.</li>
+</ul>
+
+<h2>3. Permissions Explained</h2>
+<ul>
+<li><strong>storage:</strong> To save your preferences, history, and activation data locally.</li>
+<li><strong>clipboardWrite/Read:</strong> To copy enhanced prompts to your clipboard.</li>
+<li><strong>tabs:</strong> To open AI tool websites and inject your prompt.</li>
+<li><strong>scripting:</strong> To auto-paste prompts into AI tool input fields.</li>
+<li><strong>host_permissions:</strong> Limited to specific AI tool domains for prompt injection.</li>
+</ul>
+
+<h2>4. Third-Party Services</h2>
+<ul>
+<li><strong>Razorpay:</strong> Payment processing only. <a href="https://razorpay.com/privacy/" target="_blank">Their Privacy Policy</a></li>
+<li><strong>Google Apps Script:</strong> Code verification only. No personal data stored beyond activation records (email + code).</li>
+</ul>
+
+<h2>5. Data Security</h2>
+<p>All local data is stored using Chrome's encrypted storage API. Activation codes use HMAC-SHA256 cryptographic verification.</p>
+
+<h2>6. Your Rights</h2>
+<p>You can delete all extension data at any time by going to <code>chrome://extensions</code> → SuperPrompt → Clear data, or by uninstalling the extension.</p>
+
+<h2>7. Changes</h2>
+<p>We may update this policy occasionally. Changes will be reflected on this page with an updated date.</p>
+
+<h2>8. Contact</h2>
+<p>Questions? Email us at <a href="mailto:support.alphaone@gmail.com">support.alphaone@gmail.com</a></p>
+</div>
+</body>
+</html>

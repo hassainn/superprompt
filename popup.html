@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SuperPrompt</title>
+  <link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+
+<!-- ── Payment / Upgrade Modal ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-tier-wrap">
+        <span class="modal-tier-icon" id="modalTierIcon">✨</span>
+        <span class="modal-tier-name" id="modalTierName">Pro</span>
+      </div>
+      <div class="modal-price-badge" id="modalPriceBadge">₹79 / month</div>
+    </div>
+    <ul class="modal-features" id="modalFeatures"></ul>
+    <button class="btn-razorpay" id="btnPayRazorpay">💳&nbsp; Pay Now — Get Instant Code</button>
+    <div class="how-it-works">
+      <div class="how-title">⚡ How It Works — Fully Automatic</div>
+      <div class="how-rows">
+        <div class="how-row">
+          <div class="how-row-left"><div class="how-row-num s1">1</div><div class="how-row-line"></div></div>
+          <div class="how-row-body">
+            <div class="how-row-head"><span class="how-row-icon">💳</span><span class="how-row-title">Pay Securely</span></div>
+            <div class="how-row-desc">Click Pay above · UPI, Card, NetBanking via Razorpay · Enter your email on the payment page</div>
+          </div>
+        </div>
+        <div class="how-row">
+          <div class="how-row-left"><div class="how-row-num s2">2</div><div class="how-row-line"></div></div>
+          <div class="how-row-body">
+            <div class="how-row-head"><span class="how-row-icon">📧</span><span class="how-row-title">Get Your Code by Email</span></div>
+            <div class="how-row-desc">Your unique activation code is <strong>sent instantly</strong> to your email after payment</div>
+          </div>
+        </div>
+        <div class="how-row last">
+          <div class="how-row-left"><div class="how-row-num s3">3</div></div>
+          <div class="how-row-body">
+            <div class="how-row-head"><span class="how-row-icon">🔑</span><span class="how-row-title">Activate &amp; Enjoy</span></div>
+            <div class="how-row-desc">Paste the code below · Click <strong>Activate</strong> · Instantly unlocked!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <details class="upi-fallback">
+      <summary>Or pay manually via UPI</summary>
+      <div class="upi-row">
+        <div class="upi-id-box"><span class="upi-label">UPI&nbsp;ID</span><span class="upi-val">hassainn.mcsa@okicici</span></div>
+        <button class="btn-copy-upi" id="btnCopyUpi">Copy</button>
+      </div>
+      <p class="upi-manual-note">After payment, email screenshot to <a href="mailto:support.alphaone@gmail.com" class="dev-email-inline">support.alphaone@gmail.com</a></p>
+    </details>
+    <div class="activate-section">
+      <div class="activate-label">Enter activation code from your email</div>
+      <div class="activate-row">
+        <input id="activationInput" class="activation-input" type="text" placeholder="e.g. NZP-2605-0001-A3F7" maxlength="20" autocomplete="off" spellcheck="false"/>
+        <button class="btn-activate" id="btnActivate">Activate</button>
+      </div>
+      <div class="activate-msg" id="activateMsg"></div>
+    </div>
+    <button class="modal-cancel" id="modalCancel">✕ Cancel</button>
+  </div>
+</div>
+
+<!-- ── Header ───────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-left">
+    <span class="logo">⚡</span>
+    <div>
+      <div class="title">SuperPrompt</div>
+      <div class="subtitle">Simple words → Pro AI prompts</div>
+    </div>
+  </div>
+  <button class="theme-btn" id="themeToggle" title="Toggle theme">🌙</button>
+</header>
+
+<!-- ── Tabs ──────────────────────────────────────────────────────────────── -->
+<div class="tabs">
+  <button class="tab active" data-tab="generate">⚡ Generate</button>
+  <button class="tab" data-tab="history">🕐 History</button>
+  <button class="tab" data-tab="library">⭐ Library</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     TAB: GENERATE
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-generate">
+  <div class="container">
+
+    <!-- Usage counter (free tier) -->
+    <div class="usage-bar" id="usageBar" style="display:none">
+      <div class="usage-info">
+        <span class="usage-text" id="usageText">0 / 10 prompts used this week</span>
+        <button class="usage-upgrade" id="usageUpgrade">Upgrade →</button>
+      </div>
+      <div class="usage-track"><div class="usage-fill" id="usageFill"></div></div>
+    </div>
+
+    <!-- Language -->
+    <div class="section lang-section">
+      <label class="label">Language</label>
+      <div class="lang-pills">
+        <button class="lang-pill active" data-lang="en">🇬🇧 English</button>
+        <button class="lang-pill" data-lang="hi">🇮🇳 Hindi</button>
+        <button class="lang-pill" data-lang="mix">🤝 Hinglish</button>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="section">
+      <label class="label">Your Simple Text</label>
+      <div class="input-wrap">
+        <textarea id="simpleInput" class="textarea" rows="3" maxlength="500"
+          placeholder="e.g.  write email to boss about vacation&#10;       explain quantum computing&#10;       python code to sort list"></textarea>
+        <span class="char-count" id="charCount">0 / 500</span>
+      </div>
+    </div>
+
+    <!-- Enhancement Level -->
+    <div class="section">
+      <label class="label">Enhancement Level</label>
+      <div class="level-pills">
+        <button class="pill" data-level="basic">
+          Basic <span class="pill-badge free-badge">Free</span>
+        </button>
+        <button class="pill active" data-level="pro" id="pillPro">
+          Pro ✨ <span class="pill-badge price-badge" id="proBadge">₹79/mo</span>
+        </button>
+        <button class="pill" data-level="expert" id="pillExpert">
+          Expert 🚀 <span class="pill-badge price-badge" id="expBadge">₹149/mo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="btn-generate" id="generateBtn">
+      <span class="btn-icon">✨</span> Enhance Prompt
+    </button>
+
+    <!-- Output -->
+    <div class="section output-section" id="outputSection" style="display:none">
+      <div class="output-header">
+        <label class="label">Enhanced Prompt</label>
+        <div class="output-actions">
+          <button class="btn-sm" id="copyBtn">📋 Copy</button>
+          <button class="btn-sm btn-save-lib" id="saveLibBtn" title="Save to Library">⭐ Save</button>
+          <button class="btn-sm btn-clear" id="clearBtn">✕ Clear</button>
+        </div>
+      </div>
+      <div class="output-box" id="outputBox"></div>
+      <div class="copy-feedback" id="copyFeedback">✅ Copied to clipboard!</div>
+    </div>
+
+    <!-- AI Tools -->
+    <div class="section" id="aiSection" style="display:none">
+      <label class="label">Open in AI Tool <span class="label-hint">(auto-loads prompt)</span></label>
+      <div class="ai-grid">
+        <a class="ai-btn chatgpt"    data-url="https://chatgpt.com/"           href="#"><span class="ai-icon">🤖</span> ChatGPT</a>
+        <a class="ai-btn gemini"     data-url="https://gemini.google.com/app"  href="#"><span class="ai-icon">💎</span> Gemini</a>
+        <a class="ai-btn grok"       data-url="https://grok.com/"              href="#"><span class="ai-icon">⚡</span> Grok</a>
+        <a class="ai-btn deepseek"   data-url="https://chat.deepseek.com/"     href="#"><span class="ai-icon">🔍</span> DeepSeek</a>
+        <a class="ai-btn claude"     data-url="https://claude.ai/new"          href="#"><span class="ai-icon">🧠</span> Claude</a>
+        <a class="ai-btn perplexity" data-url="https://www.perplexity.ai/"     href="#"><span class="ai-icon">🔮</span> Perplexity</a>
+      </div>
+      <p class="ai-hint">Prompt is auto-injected when the AI tool opens</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     TAB: HISTORY
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-history">
+  <div class="container">
+    <div class="section-head-row">
+      <span class="section-head-title">🕐 Recent Prompts</span>
+      <button class="btn-sm btn-clear-all" id="clearHistoryBtn">Clear All</button>
+    </div>
+    <div id="historyList" class="card-list"></div>
+    <div class="upgrade-gate" id="historyGate" style="display:none">
+      <div class="gate-icon">🔒</div>
+      <div class="gate-text">Showing last 3 prompts.<br>Upgrade to Pro for unlimited history.</div>
+      <button class="gate-btn" onclick="document.querySelector('[data-level=pro]').click()">Upgrade to Pro ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     TAB: LIBRARY
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-library">
+  <div class="container">
+    <div class="section-head-row">
+      <span class="section-head-title">⭐ Saved Prompts</span>
+      <button class="btn-sm btn-clear-all" id="clearLibraryBtn">Clear All</button>
+    </div>
+    <div id="libraryList" class="card-list"></div>
+    <div class="upgrade-gate" id="libraryGate" style="display:none">
+      <div class="gate-icon">🔒</div>
+      <div class="gate-text">Prompt Library is a Pro feature.<br>Save unlimited prompts for reuse.</div>
+      <button class="gate-btn" onclick="document.querySelector('[data-level=pro]').click()">Upgrade to Pro ✨</button>
+    </div>
+    <div class="empty-state" id="libraryEmpty" style="display:none">
+      <div class="empty-icon">⭐</div>
+      <div class="empty-text">No saved prompts yet.<br>Click <strong>⭐ Save</strong> on any generated prompt.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  SuperPrompt v2.0 &nbsp;·&nbsp; Free · Pro ₹79 · Expert ₹149/mo
+</footer>
+
+<script src="popup.js"></script>
+</body>
+</html>
